@@ -1,4 +1,9 @@
 // Funciones
+function mostrarNumeroConComas(numero) {
+    const numeroConDecimales = Number(numero).toFixed(2);
+    return numeroFormateado = numeroConDecimales.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
 function obtenerPreciosDeApi() {
     return new Promise((resolve, reject) => {
         fetch("https://api.binance.com/api/v3/ticker/price")
@@ -17,7 +22,21 @@ function obtenerPreciosDeApi() {
 }
 
 function renderizarListaDeCriptos() {
-    const contenedor = document.getElementById("listaCriptos");
+    const contenedor = document.getElementById("listaCripto");
+    contenedor.innerHTML = "";
+
+    for (const cripto of listaDeCriptos) {
+        const divPadre = document.createElement("div");
+
+        const ticker = document.createElement("p");
+        ticker.innerText = cripto.symbol;
+
+        const precio = document.createElement("p");
+        precio.innerText = `$ ${mostrarNumeroConComas(cripto.price)}`;
+
+        divPadre.append(ticker, precio);
+        contenedor.append(divPadre);
+    }
 }
 
 // Variables
@@ -27,4 +46,3 @@ const listaDeCriptos = [];
 obtenerPreciosDeApi().then(() => {
     renderizarListaDeCriptos();
 });
-console.log(listaDeCriptos);
