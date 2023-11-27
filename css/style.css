@@ -40,3 +40,9 @@ td {
   font-size: 1.6rem;
   font-family: "Montserrat", sans-serif;
   line-height: 2; }
+
+.fondo-titulo {
+  background-color: #FADF7F;
+  padding: 2rem; }
+  .fondo-titulo h1 {
+    margin: 0 auto; }
