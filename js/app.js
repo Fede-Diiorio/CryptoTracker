@@ -1,10 +1,9 @@
 // Funciones
 function obtenerPreciosDeApi() {
-    fetch("https://pokeapi.co/api/v2/pokemon/").then((response) => {
-        console.log(response);
+    fetch("http://api.binance.com/api/v3/ticker/price").then((response) => {
         return response.json();
     }).then((responseJson) => {
-        console.log(responseJson);
+        console.log(...responseJson);
     });
 }
 
