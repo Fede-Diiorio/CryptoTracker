@@ -4,6 +4,15 @@ function mostrarNumeroConComas(numero) {
     return numeroFormateado = numeroConDecimales.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
+function guardarCriptoEnLocalStorage(cripto) {
+    if (portafolio === null) {
+        portafolio = [cripto]
+    } else {
+        portafolio.push(cripto);
+    }
+    localStorage.setItem("portafolio", JSON.stringify(portafolio));
+}
+
 function renderizarBarraDeBuscarCripto() {
 
     const contenedor = document.getElementById("barraDeBusqueda");
@@ -51,18 +60,20 @@ function obtenerPreciosDeApi() {
 
 function renderizarListaDeCriptos(listaDeCriptos) {
     const contenedor = document.getElementById("listaCripto");
-    contenedor.innerHTML = "";
+    contenedor.innerText = "Elija el ticker que desea agregar a su portafolio:";
 
     for (const cripto of listaDeCriptos) {
         const divPadre = document.createElement("div");
 
         const ticker = document.createElement("p");
         ticker.innerText = cripto.symbol;
+        ticker.classList.add("borde");
+        ticker.addEventListener("click", () => {
+            guardarCriptoEnLocalStorage(cripto);
+            contenedor.innerHTML = "";
+        })
 
-        const precio = document.createElement("p");
-        precio.innerText = `$ ${mostrarNumeroConComas(cripto.price)}`;
-
-        divPadre.append(ticker, precio);
+        divPadre.append(ticker);
         contenedor.append(divPadre);
     }
 }

@@ -46,3 +46,9 @@ td {
   padding: 2rem; }
   .fondo-titulo h1 {
     margin: 0 auto; }
+
+.borde {
+  border: 1px solid #000000;
+  margin: 1rem;
+  padding: .5rem 2rem;
+  display: inline; }
