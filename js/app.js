@@ -8,9 +8,19 @@ function guardarCriptoEnLocalStorage(cripto) {
     if (portafolio === null) {
         portafolio = [cripto]
     } else {
-        portafolio.push(cripto);
+        const buscarIndiceDeCripto = portafolio.findIndex((el) => {
+            return el.symbol === cripto.symbol;
+        });
+        if (buscarIndiceDeCripto === -1) {
+            portafolio.push(cripto);
+        };
     }
     localStorage.setItem("portafolio", JSON.stringify(portafolio));
+}
+
+function obtenerCriptosDeLocalStorage() {
+    const portafolioEnLocalStorage = JSON.parse(localStorage.getItem("portafolio"));
+    portafolio = portafolioEnLocalStorage ? portafolioEnLocalStorage : [];
 }
 
 function renderizarBarraDeBuscarCripto() {
@@ -34,7 +44,7 @@ function renderizarBarraDeBuscarCripto() {
             return el.symbol.includes(ticker.toUpperCase());
         });
 
-        renderizarListaDeCriptos(tickerFiltrado);
+        renderizarBusquedaDeCripto(tickerFiltrado);
     });
 
     divPadre.append(input, boton);
@@ -58,7 +68,7 @@ function obtenerPreciosDeApi() {
     });
 }
 
-function renderizarListaDeCriptos(listaDeCriptos) {
+function renderizarBusquedaDeCripto(listaDeCriptos) {
     const contenedor = document.getElementById("listaCripto");
     contenedor.innerText = "Elija el ticker que desea agregar a su portafolio:";
 
@@ -79,10 +89,12 @@ function renderizarListaDeCriptos(listaDeCriptos) {
 }
 
 // Variables
-const portafolio = [];
+let portafolio = [];
 const listaDeCriptos = [];
 
 // Inicio del Programa
+
+obtenerCriptosDeLocalStorage();
 obtenerPreciosDeApi().then(() => {
     renderizarBarraDeBuscarCripto();
 });
