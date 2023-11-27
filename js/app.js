@@ -4,6 +4,34 @@ function mostrarNumeroConComas(numero) {
     return numeroFormateado = numeroConDecimales.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
+function renderizarBarraDeBuscarCripto() {
+
+    const contenedor = document.getElementById("barraDeBusqueda");
+    contenedor.innerHTML = "";
+
+    const divPadre = document.createElement("div");
+
+    const input = document.createElement("input");
+    input.placeholder = "Buscar...";
+
+    const boton = document.createElement("button");
+    boton.innerText = "Buscar";
+    boton.addEventListener("click", (event) => {
+        event.preventDefault();
+
+        const ticker = input.value.toUpperCase();
+        console.log(ticker)
+        const tickerFiltrado = listaDeCriptos.filter((el) => {
+            return el.symbol.includes(ticker.toUpperCase());
+        });
+
+        renderizarListaDeCriptos(tickerFiltrado);
+    });
+
+    divPadre.append(input, boton);
+    contenedor.append(divPadre);
+}
+
 function obtenerPreciosDeApi() {
     return new Promise((resolve, reject) => {
         fetch("https://api.binance.com/api/v3/ticker/price")
@@ -21,7 +49,7 @@ function obtenerPreciosDeApi() {
     });
 }
 
-function renderizarListaDeCriptos() {
+function renderizarListaDeCriptos(listaDeCriptos) {
     const contenedor = document.getElementById("listaCripto");
     contenedor.innerHTML = "";
 
@@ -40,9 +68,10 @@ function renderizarListaDeCriptos() {
 }
 
 // Variables
+const portafolio = [];
 const listaDeCriptos = [];
 
 // Inicio del Programa
 obtenerPreciosDeApi().then(() => {
-    renderizarListaDeCriptos();
+    renderizarBarraDeBuscarCripto();
 });
