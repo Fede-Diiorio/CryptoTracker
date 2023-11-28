@@ -1,9 +1,40 @@
-// Funciones
+// *** FUNCIONES ***
+function obtenerPreciosDeApi() {
+    return new Promise((resolve, reject) => {
+        fetch("https://api.binance.com/api/v3/ticker/price")
+            .then((response) => response.json())
+            .then((responseJson) => {
+                for (const cripto of responseJson) {
+                    const filtro = cripto.symbol.includes("USDT");
+                    if (filtro) {
+                        listaDeCriptos.push(cripto);
+                    }
+                }
+                resolve(listaDeCriptos);
+            })
+            .catch((error) => reject(error));
+    });
+}
+
+// Utilidades
 function mostrarNumeroConComas(numero) {
     const numeroConDecimales = Number(numero).toFixed(2);
     return numeroFormateado = numeroConDecimales.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
+function eliminarCriptoDeTabla(cripto) {
+    const indeceCriptoAEliminar = portafolio.findIndex((el) => {
+        return cripto.ticker === el.ticker;
+    });
+
+    if (indeceCriptoAEliminar !== -1) {
+        portafolio.splice(indeceCriptoAEliminar, 1);
+    }
+    localStorage.setItem("portafolio", JSON.stringify(portafolio));
+    renderizarTablaConCriptos();
+}
+
+// Local Storage
 function guardarCriptoEnLocalStorage(cripto, cantidad) {
     const agregarCripto = {
         ticker: cripto.symbol,
@@ -31,6 +62,7 @@ function obtenerCriptosDeLocalStorage() {
     portafolio = portafolioEnLocalStorage ? portafolioEnLocalStorage : [];
 }
 
+// Renderizado
 function renderizarBarraDeBuscarCripto() {
 
     const contenedor = document.getElementById("barraDeBusqueda");
@@ -59,23 +91,6 @@ function renderizarBarraDeBuscarCripto() {
     contenedor.append(divPadre);
 }
 
-function obtenerPreciosDeApi() {
-    return new Promise((resolve, reject) => {
-        fetch("https://api.binance.com/api/v3/ticker/price")
-            .then((response) => response.json())
-            .then((responseJson) => {
-                for (const cripto of responseJson) {
-                    const filtro = cripto.symbol.includes("USDT");
-                    if (filtro) {
-                        listaDeCriptos.push(cripto);
-                    }
-                }
-                resolve(listaDeCriptos);
-            })
-            .catch((error) => reject(error));
-    });
-}
-
 function renderizarBusquedaDeCripto(listaDeCriptos) {
     const contenedor = document.getElementById("listaCripto");
     contenedor.innerText = "Elija el ticker que desea agregar a su portafolio:";
@@ -90,6 +105,7 @@ function renderizarBusquedaDeCripto(listaDeCriptos) {
             const cantidad = parseFloat(prompt("Ingrese la cantidad de monedas que posee actualmente: "));
             guardarCriptoEnLocalStorage(cripto, cantidad);
             contenedor.innerHTML = "";
+            renderizarTablaConCriptos();
         })
 
         divPadre.append(ticker);
@@ -109,7 +125,6 @@ function renderizarTablaConCriptos() {
 
         const tdPrecio = document.createElement("td");
         tdPrecio.innerText = `$${mostrarNumeroConComas(criptoTabla.precio)}`;
-        console.log(tdPrecio);
 
         const tdCantidad = document.createElement("td");
         tdCantidad.innerText = criptoTabla.cantidad;
@@ -129,7 +144,10 @@ function renderizarTablaConCriptos() {
         const tdBorrar = document.createElement("td");
 
         const botonBorrar = document.createElement("button");
-        botonBorrar.innerText = "Borrar";
+        botonBorrar.innerText = "Eliminar";
+        botonBorrar.addEventListener("click", () => {
+            eliminarCriptoDeTabla(criptoTabla);
+        });
 
         tdActualizar.append(botonActualizar);
         tdBorrar.append(botonBorrar);
@@ -138,14 +156,15 @@ function renderizarTablaConCriptos() {
     }
 }
 
-// Variables
+// *** VARIABLES ***
 let portafolio = [];
 const listaDeCriptos = [];
 
-// Inicio del Programa
+// *** INICIO DE PROGRAMA ***
 
 obtenerCriptosDeLocalStorage();
 obtenerPreciosDeApi().then(() => {
     renderizarBarraDeBuscarCripto();
+    console.log(portafolio);
 });
 renderizarTablaConCriptos();
