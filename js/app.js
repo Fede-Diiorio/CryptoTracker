@@ -4,16 +4,24 @@ function mostrarNumeroConComas(numero) {
     return numeroFormateado = numeroConDecimales.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-function guardarCriptoEnLocalStorage(cripto) {
+function guardarCriptoEnLocalStorage(cripto, cantidad) {
+    const agregarCripto = {
+        ticker: cripto.symbol,
+        precio: cripto.price,
+        cantidad: parseFloat(cantidad)
+    }
+
     if (portafolio === null) {
-        portafolio = [cripto]
+        portafolio = [agregarCripto]
     } else {
         const buscarIndiceDeCripto = portafolio.findIndex((el) => {
-            return el.symbol === cripto.symbol;
+            return el.ticker === agregarCripto.ticker;
         });
         if (buscarIndiceDeCripto === -1) {
-            portafolio.push(cripto);
-        };
+            portafolio.push(agregarCripto);
+        } else {
+            portafolio[buscarIndiceDeCripto].cantidad = parseFloat(cantidad);
+        }
     }
     localStorage.setItem("portafolio", JSON.stringify(portafolio));
 }
@@ -79,12 +87,52 @@ function renderizarBusquedaDeCripto(listaDeCriptos) {
         ticker.innerText = cripto.symbol;
         ticker.classList.add("borde");
         ticker.addEventListener("click", () => {
-            guardarCriptoEnLocalStorage(cripto);
+            const cantidad = parseFloat(prompt("Ingrese la cantidad de monedas que posee actualmente: "));
+            guardarCriptoEnLocalStorage(cripto, cantidad);
             contenedor.innerHTML = "";
         })
 
         divPadre.append(ticker);
         contenedor.append(divPadre);
+    }
+}
+
+function renderizarTablaConCriptos() {
+    const contenedor = document.querySelector("#tabla table tbody");
+    contenedor.innerHTML = "";
+
+    for (const criptoTabla of portafolio) {
+        const tr = document.createElement("tr");
+
+        const tdTicker = document.createElement("td");
+        tdTicker.innerText = criptoTabla.ticker;
+
+        const tdPrecio = document.createElement("td");
+        tdPrecio.innerText = `$${mostrarNumeroConComas(criptoTabla.precio)}`;
+
+        const tdCantidad = document.createElement("td");
+        tdCantidad.innerText = criptoTabla.cantidad;
+
+        const tdValor = document.createElement("td");
+        tdValor.innerText = "Pendiente";
+
+        const tdPorcentaje = document.createElement("td");
+        tdPorcentaje.innerText = "Pendiente";
+
+        const tdActualizar = document.createElement("td");
+
+        const botonActualizar = document.createElement("button");
+        botonActualizar.innerText = "Actualizar";
+
+        const tdBorrar = document.createElement("td");
+
+        const botonBorrar = document.createElement("button");
+        botonBorrar.innerText = "Borrar";
+
+        tdActualizar.append(botonActualizar);
+        tdBorrar.append(botonBorrar);
+        tr.append(tdTicker, tdPrecio, tdCantidad, tdValor, tdPorcentaje, tdActualizar, tdBorrar);
+        contenedor.append(tr);
     }
 }
 
@@ -98,3 +146,4 @@ obtenerCriptosDeLocalStorage();
 obtenerPreciosDeApi().then(() => {
     renderizarBarraDeBuscarCripto();
 });
+renderizarTablaConCriptos();
