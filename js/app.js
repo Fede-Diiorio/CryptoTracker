@@ -35,11 +35,16 @@ function eliminarCriptoDeTabla(cripto) {
 }
 
 // Local Storage
+function obtenerCriptosDeLocalStorage() {
+    const portafolioEnLocalStorage = JSON.parse(localStorage.getItem("portafolio"));
+    portafolio = portafolioEnLocalStorage ? portafolioEnLocalStorage : [];
+}
+
 function guardarCriptoEnLocalStorage(cripto, cantidad) {
     const agregarCripto = {
         ticker: cripto.symbol,
         precio: cripto.price,
-        cantidad: parseFloat(cantidad)
+        cantidad: parseFloat(cantidad),
     }
 
     if (portafolio === null) {
@@ -57,9 +62,15 @@ function guardarCriptoEnLocalStorage(cripto, cantidad) {
     localStorage.setItem("portafolio", JSON.stringify(portafolio));
 }
 
-function obtenerCriptosDeLocalStorage() {
-    const portafolioEnLocalStorage = JSON.parse(localStorage.getItem("portafolio"));
-    portafolio = portafolioEnLocalStorage ? portafolioEnLocalStorage : [];
+function actualizarCriptoEnLocalStorage(cripto) {
+    const buscarIndiceDeCripto = portafolio.findIndex((el) => {
+        return el.ticker === cripto.ticker;
+    });
+    if (buscarIndiceDeCripto !== -1) {
+        const cantidad = parseFloat(prompt("Ingrese la nueva cantidad de monedas que posee:"));
+        portafolio[buscarIndiceDeCripto].cantidad = parseFloat(cantidad);
+    }
+    localStorage.setItem("portafolio", JSON.stringify(portafolio));
 }
 
 // Renderizado
@@ -79,7 +90,6 @@ function renderizarBarraDeBuscarCripto() {
         event.preventDefault();
 
         const ticker = input.value.toUpperCase();
-        console.log(ticker)
         const tickerFiltrado = listaDeCriptos.filter((el) => {
             return el.symbol.includes(ticker.toUpperCase());
         });
@@ -133,16 +143,15 @@ function renderizarTablaConCriptos() {
         const resultadoCartera = criptoTabla.precio * criptoTabla.cantidad;
         tdValor.innerText = `$ ${mostrarNumeroConComas(resultadoCartera)}`;
 
-        const tdPorcentaje = document.createElement("td");
-        tdPorcentaje.innerText = "Pendiente";
-
         const tdActualizar = document.createElement("td");
-
         const botonActualizar = document.createElement("button");
         botonActualizar.innerText = "Actualizar";
+        botonActualizar.addEventListener("click", () => {
+            actualizarCriptoEnLocalStorage(criptoTabla);
+            renderizarTablaConCriptos();
+        });
 
         const tdBorrar = document.createElement("td");
-
         const botonBorrar = document.createElement("button");
         botonBorrar.innerText = "Eliminar";
         botonBorrar.addEventListener("click", () => {
@@ -151,7 +160,7 @@ function renderizarTablaConCriptos() {
 
         tdActualizar.append(botonActualizar);
         tdBorrar.append(botonBorrar);
-        tr.append(tdTicker, tdPrecio, tdCantidad, tdValor, tdPorcentaje, tdActualizar, tdBorrar);
+        tr.append(tdTicker, tdPrecio, tdCantidad, tdValor, tdActualizar, tdBorrar);
         contenedor.append(tr);
     }
 }
@@ -165,6 +174,5 @@ const listaDeCriptos = [];
 obtenerCriptosDeLocalStorage();
 obtenerPreciosDeApi().then(() => {
     renderizarBarraDeBuscarCripto();
-    console.log(portafolio);
 });
 renderizarTablaConCriptos();
