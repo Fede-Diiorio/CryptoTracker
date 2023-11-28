@@ -109,12 +109,14 @@ function renderizarTablaConCriptos() {
 
         const tdPrecio = document.createElement("td");
         tdPrecio.innerText = `$${mostrarNumeroConComas(criptoTabla.precio)}`;
+        console.log(tdPrecio);
 
         const tdCantidad = document.createElement("td");
         tdCantidad.innerText = criptoTabla.cantidad;
 
         const tdValor = document.createElement("td");
-        tdValor.innerText = "Pendiente";
+        const resultadoCartera = criptoTabla.precio * criptoTabla.cantidad;
+        tdValor.innerText = `$ ${mostrarNumeroConComas(resultadoCartera)}`;
 
         const tdPorcentaje = document.createElement("td");
         tdPorcentaje.innerText = "Pendiente";
