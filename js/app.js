@@ -79,13 +79,15 @@ function renderizarBarraDeBuscarCripto() {
     const contenedor = document.getElementById("barraDeBusqueda");
     contenedor.innerHTML = "";
 
-    const divPadre = document.createElement("div");
+    const divPadre = document.createElement("form");
+    divPadre.classList.add("barra-de-busqueda");
 
     const input = document.createElement("input");
     input.placeholder = "Buscar...";
 
     const boton = document.createElement("button");
     boton.innerText = "Buscar";
+    boton.classList.add("btn", "btn-primary");
     boton.addEventListener("click", (event) => {
         event.preventDefault();
 
@@ -93,7 +95,7 @@ function renderizarBarraDeBuscarCripto() {
         const tickerFiltrado = listaDeCriptos.filter((el) => {
             return el.symbol.includes(ticker.toUpperCase());
         });
-
+        renderizarBarraDeBuscarCripto();
         renderizarBusquedaDeCripto(tickerFiltrado);
     });
 
@@ -105,12 +107,13 @@ function renderizarBusquedaDeCripto(listaDeCriptos) {
     const contenedor = document.getElementById("listaCripto");
     contenedor.innerText = "Elija el ticker que desea agregar a su portafolio:";
 
+    const divPadre = document.createElement("div");
+    divPadre.classList.add("d-flex");
     for (const cripto of listaDeCriptos) {
-        const divPadre = document.createElement("div");
 
         const ticker = document.createElement("p");
         ticker.innerText = cripto.symbol;
-        ticker.classList.add("borde");
+        ticker.classList.add("ticker-busqueda");
         ticker.addEventListener("click", () => {
             const cantidad = parseFloat(prompt("Ingrese la cantidad de monedas que posee actualmente: "));
             guardarCriptoEnLocalStorage(cripto, cantidad);
@@ -145,6 +148,7 @@ function renderizarTablaConCriptos() {
 
         const tdActualizar = document.createElement("td");
         const botonActualizar = document.createElement("button");
+        botonActualizar.classList.add("btn", "btn-primary");
         botonActualizar.innerText = "Actualizar";
         botonActualizar.addEventListener("click", () => {
             actualizarCriptoEnLocalStorage(criptoTabla);
@@ -153,6 +157,7 @@ function renderizarTablaConCriptos() {
 
         const tdBorrar = document.createElement("td");
         const botonBorrar = document.createElement("button");
+        botonBorrar.classList.add("btn", "btn-primary");
         botonBorrar.innerText = "Eliminar";
         botonBorrar.addEventListener("click", () => {
             eliminarCriptoDeTabla(criptoTabla);

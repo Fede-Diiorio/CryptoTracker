@@ -7,9 +7,34 @@
     }
 }
 
-.borde {
-    border: 1px solid $negro;
+.ticker-busqueda {
+    border: 1px solid $secundario;
     margin: 1rem;
     padding: .5rem 2rem;
     display: inline;
+    background-color: $blanco;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+
+    &:hover {
+        background-color: $secundario;
+    }
+}
+
+.barra-de-busqueda {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    align-items: center;
+    margin: 2rem 0;
+
+    input {
+        border-radius: 1rem;
+        border: 1px solid $grisOscuro;
+
+        &::placeholder {
+            padding-left: 1rem;
+        }
+    }
 }
