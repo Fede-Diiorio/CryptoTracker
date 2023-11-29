@@ -25,6 +25,10 @@
   background-color: #FADF7F; }
   .swal2-container .swal2-confirm.swal2-styled {
     background-color: #009FB7; }
+  .swal2-container .swal2-cancel {
+    font-size: 1.5rem; }
+  .swal2-container .swal2-input-label {
+    padding: 0 2rem; }
 
 .swal2-confirm.swal2-styled,
 .swal2-deny.swal2-styled {
@@ -79,8 +83,8 @@ td {
 
 .ticker-busqueda {
   border: 1px solid #009FB7;
-  margin: 1rem;
   padding: .5rem 2rem;
+  margin-bottom: 2rem;
   display: inline;
   background-color: #ffffff;
   border-radius: 1rem;

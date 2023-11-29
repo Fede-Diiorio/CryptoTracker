@@ -96,17 +96,34 @@ function actualizarCriptoEnLocalStorage(cripto) {
     });
     if (buscarIndiceDeCripto !== -1) {
 
-        const cantidad = parseFloat(prompt("Ingrese la nueva cantidad de monedas que posee:"));
-
-        if (cantidad > 0) {
-            portafolio[buscarIndiceDeCripto].cantidad = parseFloat(cantidad);
-        } else {
-            alert("Debe ingresar un número mayor a 0");
-        }
-
+        Swal.fire({
+            title: "Nueva Cantidad",
+            input: "number",
+            inputValue: portafolio[buscarIndiceDeCripto].cantidad,
+            inputLabel: "Ingrese la nueva cantidad de monedas que posee:",
+            inputAttributes: {
+                autocomplete: "off",
+                step: "any", // Permite números decimales
+            },
+            showCancelButton: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const cantidad = parseFloat(result.value);
+                if (!isNaN(cantidad) && cantidad > 0) {
+                    portafolio[buscarIndiceDeCripto].cantidad = cantidad;
+                    localStorage.setItem("portafolio", JSON.stringify(portafolio));
+                } else {
+                    Swal.fire({
+                        title: "Error",
+                        text: "Debe ingresar un número válido mayor a 0.",
+                        icon: "error"
+                    });
+                }
+            }
+        });
     }
-    localStorage.setItem("portafolio", JSON.stringify(portafolio));
 }
+
 
 // Renderizado
 function renderizarBarraDeBuscarCripto() {
@@ -140,30 +157,52 @@ function renderizarBarraDeBuscarCripto() {
 
 function renderizarBusquedaDeCripto(listaDeCriptos) {
     const contenedor = document.getElementById("listaCripto");
-    contenedor.innerText = "Elija el ticker que desea agregar a su portafolio:";
+    contenedor.innerText = "";
+
+    const pregunta = document.createElement("p");
+    pregunta.innerText = "Elija el ticker que desea agregar a su portafolio:";
 
     const divPadre = document.createElement("div");
-    divPadre.classList.add("d-flex");
+    divPadre.classList.add("d-flex", "column-gap-3");
     for (const cripto of listaDeCriptos) {
 
         const ticker = document.createElement("p");
         ticker.innerText = cripto.symbol;
         ticker.classList.add("ticker-busqueda");
-        ticker.addEventListener("click", () => {
-            const cantidad = parseFloat(prompt("Ingrese la cantidad de monedas que posee actualmente: "));
-            if (cantidad > 0) {
-                guardarCriptoEnLocalStorage(cripto, cantidad);
-                contenedor.innerHTML = "";
-                renderizarTablaConCriptos();
-            } else {
-                alert("Debe ingresar un número mayor a 0.");
+        ticker.addEventListener("click", async () => {
+            const { value: cantidad } = await Swal.fire({
+                title: "Cantidad Actual",
+                input: "number",
+                icon: "question",
+                inputLabel: "Ingrese la cantidad de monedas que posee actualmente:",
+                inputAttributes: {
+                    autocomplete: "off",
+                    step: "any", // Permite números decimales
+                },
+                showCancelButton: true,
+            });
+
+            if (cantidad !== undefined && cantidad !== null) {
+                const cantidadFloat = parseFloat(cantidad);
+                if (!isNaN(cantidadFloat) && cantidadFloat > 0) {
+                    guardarCriptoEnLocalStorage(cripto, cantidadFloat);
+                    contenedor.innerHTML = "";
+                    renderizarTablaConCriptos();
+                } else {
+                    Swal.fire({
+                        title: "Error",
+                        text: "Debe ingresar un número válido mayor a 0.",
+                        icon: "error"
+                    });
+                }
             }
-        })
+        });
 
         divPadre.append(ticker);
-        contenedor.append(divPadre);
+        contenedor.append(pregunta, divPadre);
     }
 }
+
 
 function renderizarTablaConCriptos() {
     const contenedor = document.querySelector("#tabla table tbody");
