@@ -114,6 +114,8 @@ function actualizarCriptoEnLocalStorage(cripto) {
                     portafolio[buscarIndiceDeCripto].cantidad = cantidad;
                     portafolio[buscarIndiceDeCripto].total = portafolio[buscarIndiceDeCripto].precio * cantidad;
                     localStorage.setItem("portafolio", JSON.stringify(portafolio));
+                    renderizarTotalDeCartera();
+                    renderizarTablaConCriptos();
                 } else {
                     Swal.fire({
                         title: "Error",
@@ -235,7 +237,7 @@ function renderizarBusquedaDeCripto(listaDeCriptos) {
 function renderizarTablaConCriptos() {
     const contenedor = document.querySelector("#tabla table tbody");
     contenedor.innerHTML = "";
-    
+
     renderizarTotalDeCartera();
 
     for (const criptoTabla of portafolio) {
@@ -245,7 +247,7 @@ function renderizarTablaConCriptos() {
         tdTicker.innerText = criptoTabla.ticker;
 
         const tdPrecio = document.createElement("td");
-        tdPrecio.innerText = `$${mostrarNumeroConComas(criptoTabla.precio)}`;
+        tdPrecio.innerText = `$ ${mostrarNumeroConComas(criptoTabla.precio)}`;
 
         const tdCantidad = document.createElement("td");
         tdCantidad.innerText = criptoTabla.cantidad;
@@ -260,8 +262,6 @@ function renderizarTablaConCriptos() {
         botonActualizar.innerHTML = '<i class="fa-solid fa-rotate-right"></i>';
         botonActualizar.addEventListener("click", () => {
             actualizarCriptoEnLocalStorage(criptoTabla);
-            renderizarTotalDeCartera();
-            renderizarTablaConCriptos();
         });
 
         const tdBorrar = document.createElement("td");
