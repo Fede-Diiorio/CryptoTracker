@@ -15,6 +15,25 @@
     background-color: #1F363D;
     border: 1px solid #1F363D; }
 
+.toastify.on {
+  font-size: 1.6rem; }
+
+.swal2-title {
+  font-size: 3rem; }
+
+.swal2-container {
+  background-color: #FADF7F; }
+  .swal2-container .swal2-confirm.swal2-styled {
+    background-color: #009FB7; }
+
+.swal2-confirm.swal2-styled,
+.swal2-deny.swal2-styled {
+  font-size: 1.5rem;
+  min-width: 6rem; }
+
+#swal2-html-container {
+  font-size: 1.6rem; }
+
 h1,
 h2,
 h3 {

@@ -1,4 +1,5 @@
 // *** FUNCIONES ***
+// Utilidades
 function obtenerPreciosDeApi() {
     return new Promise((resolve, reject) => {
         fetch("https://api.binance.com/api/v3/ticker/price")
@@ -16,7 +17,6 @@ function obtenerPreciosDeApi() {
     });
 }
 
-// Utilidades
 function mostrarNumeroConComas(numero) {
     const numeroConDecimales = Number(numero).toFixed(2);
     return numeroFormateado = numeroConDecimales.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -29,6 +29,20 @@ function eliminarCriptoDeTabla(cripto) {
 
     if (indeceCriptoAEliminar !== -1) {
         portafolio.splice(indeceCriptoAEliminar, 1);
+        Toastify({
+            text: "Eliminada Correctamente",
+            duration: 3000,
+            destination: "https://github.com/apvarun/toastify-js",
+            newWindow: true,
+            close: true,
+            gravity: "top", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+                background: "linear-gradient(to right, #b1140e, #d47370)",
+            },
+            onClick: function () { } // Callback after click
+        }).showToast();
     }
     localStorage.setItem("portafolio", JSON.stringify(portafolio));
     renderizarTablaConCriptos();
@@ -55,6 +69,20 @@ function guardarCriptoEnLocalStorage(cripto, cantidad) {
         });
         if (buscarIndiceDeCripto === -1) {
             portafolio.push(agregarCripto);
+            Toastify({
+                text: "¡Agregada correctamente!",
+                duration: 3000,
+                destination: "https://github.com/apvarun/toastify-js",
+                newWindow: true,
+                close: true,
+                gravity: "top", // `top` or `bottom`
+                position: "right", // `left`, `center` or `right`
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+                style: {
+                    background: "linear-gradient(to right, #00b09b, #96c93d)",
+                },
+                onClick: function () { } // Callback after click
+            }).showToast();
         } else {
             portafolio[buscarIndiceDeCripto].cantidad = parseFloat(cantidad);
         }
@@ -67,8 +95,15 @@ function actualizarCriptoEnLocalStorage(cripto) {
         return el.ticker === cripto.ticker;
     });
     if (buscarIndiceDeCripto !== -1) {
+
         const cantidad = parseFloat(prompt("Ingrese la nueva cantidad de monedas que posee:"));
-        portafolio[buscarIndiceDeCripto].cantidad = parseFloat(cantidad);
+
+        if (cantidad > 0) {
+            portafolio[buscarIndiceDeCripto].cantidad = parseFloat(cantidad);
+        } else {
+            alert("Debe ingresar un número mayor a 0");
+        }
+
     }
     localStorage.setItem("portafolio", JSON.stringify(portafolio));
 }
@@ -116,9 +151,13 @@ function renderizarBusquedaDeCripto(listaDeCriptos) {
         ticker.classList.add("ticker-busqueda");
         ticker.addEventListener("click", () => {
             const cantidad = parseFloat(prompt("Ingrese la cantidad de monedas que posee actualmente: "));
-            guardarCriptoEnLocalStorage(cripto, cantidad);
-            contenedor.innerHTML = "";
-            renderizarTablaConCriptos();
+            if (cantidad > 0) {
+                guardarCriptoEnLocalStorage(cripto, cantidad);
+                contenedor.innerHTML = "";
+                renderizarTablaConCriptos();
+            } else {
+                alert("Debe ingresar un número mayor a 0.");
+            }
         })
 
         divPadre.append(ticker);
@@ -160,7 +199,18 @@ function renderizarTablaConCriptos() {
         botonBorrar.classList.add("boton-td");
         botonBorrar.innerHTML = '<i class="fa-solid fa-trash"></i>';
         botonBorrar.addEventListener("click", () => {
-            eliminarCriptoDeTabla(criptoTabla);
+            Swal.fire({
+                title: "¿Desea eliminar esta cripto de su portafolio?",
+                showDenyButton: true,
+                confirmButtonText: "Si",
+                denyButtonText: `No`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    eliminarCriptoDeTabla(criptoTabla);
+                } else if (result.isDenied) {
+                    renderizarTablaConCriptos();
+                }
+            });
         });
 
         tdActualizar.append(botonActualizar);
