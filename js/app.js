@@ -147,8 +147,35 @@ function renderizarBarraDeBuscarCripto() {
         const tickerFiltrado = listaDeCriptos.filter((el) => {
             return el.symbol.includes(ticker.toUpperCase());
         });
-        renderizarBarraDeBuscarCripto();
-        renderizarBusquedaDeCripto(tickerFiltrado);
+
+        if (tickerFiltrado.length === 0) {
+            Swal.fire({
+                title: "Lo sentimos",
+                text: "No poseemos ese ticker en nuestra base de datos.",
+                icon: "question"
+            });
+        } else {
+            if (input.value === "") {
+                Toastify({
+                    text: "Debe ingresar un ticker",
+                    duration: 3000,
+                    destination: "https://github.com/apvarun/toastify-js",
+                    newWindow: true,
+                    close: true,
+                    gravity: "top", // `top` or `bottom`
+                    position: "right", // `left`, `center` or `right`
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    style: {
+                        background: "linear-gradient(to right, #b1140e, #d47370)",
+                    },
+                    onClick: function () { } // Callback after click
+                }).showToast();
+            } else {
+                renderizarBarraDeBuscarCripto();
+                renderizarBusquedaDeCripto(tickerFiltrado);
+            }
+        }
+
     });
 
     divPadre.append(input, boton);
@@ -163,7 +190,7 @@ function renderizarBusquedaDeCripto(listaDeCriptos) {
     pregunta.innerText = "Elija el ticker que desea agregar a su portafolio:";
 
     const divPadre = document.createElement("div");
-    divPadre.classList.add("d-flex", "column-gap-3");
+    divPadre.classList.add("d-flex", "column-gap-3", "flex-wrap");
     for (const cripto of listaDeCriptos) {
 
         const ticker = document.createElement("p");
@@ -202,7 +229,6 @@ function renderizarBusquedaDeCripto(listaDeCriptos) {
         contenedor.append(pregunta, divPadre);
     }
 }
-
 
 function renderizarTablaConCriptos() {
     const contenedor = document.querySelector("#tabla table tbody");
