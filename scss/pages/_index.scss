@@ -38,3 +38,40 @@
         }
     }
 }
+
+.table {
+
+    .th-eliminar,
+    .th-actualizar {
+        text-align: center;
+    }
+
+}
+
+.boton-td {
+    margin: 0 auto;
+    text-align: center;
+
+    .fa-trash {
+        color: $eliminar;
+        transition: all .3s ease-in-out;
+
+        &:hover {
+            color: $eliminarOscuro;
+        }
+    }
+
+    .fa-rotate-right {
+        color: $secundario;
+        transition: all .3s ease-in-out;
+
+        &:hover {
+            color: $secundarioOscuro;
+        }
+    }
+
+    i {
+        font-size: 3rem;
+        cursor: pointer;
+    }
+}

@@ -147,18 +147,18 @@ function renderizarTablaConCriptos() {
         tdValor.innerText = `$ ${mostrarNumeroConComas(resultadoCartera)}`;
 
         const tdActualizar = document.createElement("td");
-        const botonActualizar = document.createElement("button");
-        botonActualizar.classList.add("btn", "btn-primary");
-        botonActualizar.innerText = "Actualizar";
+        const botonActualizar = document.createElement("p");
+        botonActualizar.classList.add("boton-td");
+        botonActualizar.innerHTML = '<i class="fa-solid fa-rotate-right"></i>';
         botonActualizar.addEventListener("click", () => {
             actualizarCriptoEnLocalStorage(criptoTabla);
             renderizarTablaConCriptos();
         });
 
         const tdBorrar = document.createElement("td");
-        const botonBorrar = document.createElement("button");
-        botonBorrar.classList.add("btn", "btn-primary");
-        botonBorrar.innerText = "Eliminar";
+        const botonBorrar = document.createElement("p");
+        botonBorrar.classList.add("boton-td");
+        botonBorrar.innerHTML = '<i class="fa-solid fa-trash"></i>';
         botonBorrar.addEventListener("click", () => {
             eliminarCriptoDeTabla(criptoTabla);
         });
