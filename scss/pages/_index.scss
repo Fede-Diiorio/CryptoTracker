@@ -75,3 +75,15 @@
         cursor: pointer;
     }
 }
+
+.total-cartera {
+    display: flex;
+    justify-content: end;
+    
+    .total-cartera__texto{
+        border: 1px solid $secundario;
+        border-radius: 1rem;
+        padding: .5rem 2rem;
+        
+    }
+}

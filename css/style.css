@@ -125,3 +125,11 @@ td {
   .boton-td i {
     font-size: 3rem;
     cursor: pointer; }
+
+.total-cartera {
+  display: flex;
+  justify-content: end; }
+  .total-cartera .total-cartera__texto {
+    border: 1px solid #009FB7;
+    border-radius: 1rem;
+    padding: .5rem 2rem; }

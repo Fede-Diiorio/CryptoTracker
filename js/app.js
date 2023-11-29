@@ -59,6 +59,7 @@ function guardarCriptoEnLocalStorage(cripto, cantidad) {
         ticker: cripto.symbol,
         precio: cripto.price,
         cantidad: parseFloat(cantidad),
+        total: cripto.price * cantidad
     }
 
     if (portafolio === null) {
@@ -111,6 +112,7 @@ function actualizarCriptoEnLocalStorage(cripto) {
                 const cantidad = parseFloat(result.value);
                 if (!isNaN(cantidad) && cantidad > 0) {
                     portafolio[buscarIndiceDeCripto].cantidad = cantidad;
+                    portafolio[buscarIndiceDeCripto].total = portafolio[buscarIndiceDeCripto].precio * cantidad;
                     localStorage.setItem("portafolio", JSON.stringify(portafolio));
                 } else {
                     Swal.fire({
@@ -124,7 +126,6 @@ function actualizarCriptoEnLocalStorage(cripto) {
     }
 }
 
-
 // Renderizado
 function renderizarBarraDeBuscarCripto() {
 
@@ -135,7 +136,7 @@ function renderizarBarraDeBuscarCripto() {
     divPadre.classList.add("barra-de-busqueda");
 
     const input = document.createElement("input");
-    input.placeholder = "Buscar...";
+    input.placeholder = "Buscar ticker...";
 
     const boton = document.createElement("button");
     boton.innerText = "Buscar";
@@ -150,14 +151,15 @@ function renderizarBarraDeBuscarCripto() {
 
         if (tickerFiltrado.length === 0) {
             Swal.fire({
-                title: "Lo sentimos",
-                text: "No poseemos ese ticker en nuestra base de datos.",
+                title: "Hubo un Problema",
+                text: "No contamos con ese ticker en nuestra base de datos.",
                 icon: "question"
             });
+            renderizarBarraDeBuscarCripto();
         } else {
             if (input.value === "") {
                 Toastify({
-                    text: "Debe ingresar un ticker",
+                    text: "Debe ingresar un ticker válido",
                     duration: 3000,
                     destination: "https://github.com/apvarun/toastify-js",
                     newWindow: true,
@@ -233,6 +235,8 @@ function renderizarBusquedaDeCripto(listaDeCriptos) {
 function renderizarTablaConCriptos() {
     const contenedor = document.querySelector("#tabla table tbody");
     contenedor.innerHTML = "";
+    
+    renderizarTotalDeCartera();
 
     for (const criptoTabla of portafolio) {
         const tr = document.createElement("tr");
@@ -256,6 +260,7 @@ function renderizarTablaConCriptos() {
         botonActualizar.innerHTML = '<i class="fa-solid fa-rotate-right"></i>';
         botonActualizar.addEventListener("click", () => {
             actualizarCriptoEnLocalStorage(criptoTabla);
+            renderizarTotalDeCartera();
             renderizarTablaConCriptos();
         });
 
@@ -272,6 +277,7 @@ function renderizarTablaConCriptos() {
             }).then((result) => {
                 if (result.isConfirmed) {
                     eliminarCriptoDeTabla(criptoTabla);
+                    renderizarTotalDeCartera();
                 } else if (result.isDenied) {
                     renderizarTablaConCriptos();
                 }
@@ -285,6 +291,26 @@ function renderizarTablaConCriptos() {
     }
 }
 
+function renderizarTotalDeCartera() {
+    const contenedor = document.getElementById("totalCartera");
+    contenedor.innerHTML = "";
+
+    let mostrarTotal = 0;
+    for (let i = 0; portafolio.length > i; i++) {
+        mostrarTotal += parseFloat(portafolio[i].total);
+    }
+
+    const divPadre = document.createElement("div");
+    divPadre.classList.add("total-cartera");
+
+    const total = document.createElement("p");
+    total.classList.add("total-cartera__texto");
+    total.innerHTML = `<strong>Total: </strong>$ ${mostrarNumeroConComas(mostrarTotal)}`;
+
+    divPadre.append(total);
+    contenedor.append(divPadre)
+}
+
 // *** VARIABLES ***
 let portafolio = [];
 const listaDeCriptos = [];
@@ -296,3 +322,4 @@ obtenerPreciosDeApi().then(() => {
     renderizarBarraDeBuscarCripto();
 });
 renderizarTablaConCriptos();
+renderizarTotalDeCartera();
