@@ -311,6 +311,23 @@ function renderizarTotalDeCartera() {
     contenedor.append(divPadre)
 }
 
+function renderizadoDeBotonDeFiltro() {
+    const contenedor = document.getElementById("filtroTicker");
+    contenedor.innerHTML = "";
+
+    const divPadre = document.createElement("div");
+    divPadre.classList.add("caja-filtro");
+
+    const flechaArriba = document.createElement("i");
+    flechaArriba.classList.add("fa-solid", "fa-caret-up");
+
+    const flechaAbajo = document.createElement("i");
+    flechaAbajo.classList.add("fa-solid", "fa-caret-down");
+
+    divPadre.append(flechaArriba, flechaAbajo);
+    contenedor.append(divPadre);
+}
+
 // *** VARIABLES ***
 let portafolio = [];
 const listaDeCriptos = [];
@@ -321,5 +338,6 @@ obtenerCriptosDeLocalStorage();
 obtenerPreciosDeApi().then(() => {
     renderizarBarraDeBuscarCripto();
 });
+renderizadoDeBotonDeFiltro();
 renderizarTablaConCriptos();
 renderizarTotalDeCartera();
