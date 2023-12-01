@@ -262,6 +262,7 @@ function renderizarTablaConCriptos() {
         botonActualizar.innerHTML = '<i class="fa-solid fa-rotate-right"></i>';
         botonActualizar.addEventListener("click", () => {
             actualizarCriptoEnLocalStorage(criptoTabla);
+            renderizarTablaConCriptos();
         });
 
         const tdBorrar = document.createElement("td");
@@ -311,8 +312,8 @@ function renderizarTotalDeCartera() {
     contenedor.append(divPadre)
 }
 
-function renderizadoDeBotonDeFiltroTicker() {
-    const contenedor = document.getElementById("filtroTicker");
+function renderizadoDeBotonDeFiltroOrden(id, propiedad) {
+    const contenedor = document.getElementById(id);
     contenedor.innerHTML = "";
 
     const divPadre = document.createElement("div");
@@ -322,10 +323,10 @@ function renderizadoDeBotonDeFiltroTicker() {
     flechaArriba.classList.add("fa-solid", "fa-caret-up");
     flechaArriba.addEventListener("click", () => {
         portafolio.sort((a, b) => {
-            if (a.ticker > b.ticker) {
+            if (a[propiedad] < b[propiedad]) {
                 return 1;
             }
-            if (a.ticker < b.ticker) {
+            if (a[propiedad] > b[propiedad]) {
                 return -1;
             }
             return 0
@@ -337,10 +338,10 @@ function renderizadoDeBotonDeFiltroTicker() {
     flechaAbajo.classList.add("fa-solid", "fa-caret-down");
     flechaAbajo.addEventListener("click", () => {
         portafolio.sort((a, b) => {
-            if (a.ticker > b.ticker) {
+            if (a[propiedad] < b[propiedad]) {
                 return -1;
             }
-            if (a.ticker < b.ticker) {
+            if (a[propiedad] > b[propiedad]) {
                 return 1;
             }
             return 0
@@ -362,8 +363,11 @@ const listaDeCriptos = [];
 obtenerCriptosDeLocalStorage();
 obtenerPreciosDeApi().then(() => {
     renderizarBarraDeBuscarCripto();
-    console.log(portafolio);
+    console.log(portafolio[1].ticker)
 });
-renderizadoDeBotonDeFiltroTicker();
+renderizadoDeBotonDeFiltroOrden("filtroTicker", "ticker");
+renderizadoDeBotonDeFiltroOrden("filtroPrecio", "precio");
+renderizadoDeBotonDeFiltroOrden("filtroCantidad", "cantidad");
+renderizadoDeBotonDeFiltroOrden("filtroCartera", "total");
 renderizarTablaConCriptos();
 renderizarTotalDeCartera();
