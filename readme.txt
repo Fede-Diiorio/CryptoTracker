@@ -1,3 +1,7 @@
+<-- SOBRE EL PROYECTO -->
+
+Para este trabajo, se utilizó la API de Binance. Mediante funciones, se filtran ciertos pares para contrastar, en lo posible, todos los tickers contra el USDT. Una vez filtrados todos los pares, estos se renderizan según la búsqueda realizada. Al renderizar todos los pares filtrados en la búsqueda, deberás hacer clic en el par que necesites, y te pedirá que definas la cantidad de monedas deseadas. Con estos datos obtenidos mediante el DOM, se irán mostrando todas las monedas en pantalla.
+
 <-- COMO INSTALAR SASS PARA EL CORRECTO FUNCIONAMIENTO DE ESTE PROYECTO -->
 
 1. Abrir la consola en esta carpeta con ctrl+ñ
