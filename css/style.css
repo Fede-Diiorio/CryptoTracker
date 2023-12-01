@@ -111,9 +111,10 @@ td {
   font-size: 1.6rem;
   align-items: center; }
 
-.table .th-eliminar,
-.table .th-actualizar {
-  text-align: center; }
+.table .table__th.th-eliminar,
+.table .table__th.th-actualizar {
+  display: flex;
+  justify-content: center; }
 
 .boton-td {
   margin: 0 auto;

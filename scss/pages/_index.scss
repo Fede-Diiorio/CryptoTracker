@@ -48,9 +48,10 @@
         align-items: center;
     }
 
-    .th-eliminar,
-    .th-actualizar {
-        text-align: center;
+    .table__th.th-eliminar,
+    .table__th.th-actualizar {
+        display: flex;
+        justify-content: center;
     }
 
 }

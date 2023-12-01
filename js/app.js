@@ -57,7 +57,7 @@ function obtenerCriptosDeLocalStorage() {
 function guardarCriptoEnLocalStorage(cripto, cantidad) {
     const agregarCripto = {
         ticker: cripto.symbol,
-        precio: cripto.price,
+        precio: parseFloat(cripto.price),
         cantidad: parseFloat(cantidad),
         total: cripto.price * cantidad
     }
@@ -363,11 +363,10 @@ const listaDeCriptos = [];
 obtenerCriptosDeLocalStorage();
 obtenerPreciosDeApi().then(() => {
     renderizarBarraDeBuscarCripto();
-    console.log(portafolio[1].ticker)
+    renderizadoDeBotonDeFiltroOrden("filtroTicker", "ticker");
+    renderizadoDeBotonDeFiltroOrden("filtroPrecio", "precio");
+    renderizadoDeBotonDeFiltroOrden("filtroCantidad", "cantidad");
+    renderizadoDeBotonDeFiltroOrden("filtroCartera", "total");
+    renderizarTablaConCriptos();
+    renderizarTotalDeCartera();
 });
-renderizadoDeBotonDeFiltroOrden("filtroTicker", "ticker");
-renderizadoDeBotonDeFiltroOrden("filtroPrecio", "precio");
-renderizadoDeBotonDeFiltroOrden("filtroCantidad", "cantidad");
-renderizadoDeBotonDeFiltroOrden("filtroCartera", "total");
-renderizarTablaConCriptos();
-renderizarTotalDeCartera();
