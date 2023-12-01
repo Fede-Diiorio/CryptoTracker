@@ -311,18 +311,43 @@ function renderizarTotalDeCartera() {
     contenedor.append(divPadre)
 }
 
-function renderizadoDeBotonDeFiltro() {
+function renderizadoDeBotonDeFiltroTicker() {
     const contenedor = document.getElementById("filtroTicker");
     contenedor.innerHTML = "";
 
     const divPadre = document.createElement("div");
-    divPadre.classList.add("caja-filtro");
+    divPadre.classList.add("caja-filtro", "d-flex", "flex-column");
 
     const flechaArriba = document.createElement("i");
     flechaArriba.classList.add("fa-solid", "fa-caret-up");
+    flechaArriba.addEventListener("click", () => {
+        portafolio.sort((a, b) => {
+            if (a.ticker > b.ticker) {
+                return 1;
+            }
+            if (a.ticker < b.ticker) {
+                return -1;
+            }
+            return 0
+        })
+        renderizarTablaConCriptos();
+    });
 
     const flechaAbajo = document.createElement("i");
     flechaAbajo.classList.add("fa-solid", "fa-caret-down");
+    flechaAbajo.addEventListener("click", () => {
+        portafolio.sort((a, b) => {
+            if (a.ticker > b.ticker) {
+                return -1;
+            }
+            if (a.ticker < b.ticker) {
+                return 1;
+            }
+            return 0
+        })
+        renderizarTablaConCriptos();
+    });
+
 
     divPadre.append(flechaArriba, flechaAbajo);
     contenedor.append(divPadre);
@@ -337,7 +362,8 @@ const listaDeCriptos = [];
 obtenerCriptosDeLocalStorage();
 obtenerPreciosDeApi().then(() => {
     renderizarBarraDeBuscarCripto();
+    console.log(portafolio);
 });
-renderizadoDeBotonDeFiltro();
+renderizadoDeBotonDeFiltroTicker();
 renderizarTablaConCriptos();
 renderizarTotalDeCartera();

@@ -41,6 +41,13 @@
 
 .table {
 
+    .table__th {
+        display: flex;
+        gap: 1rem;
+        font-size: 1.6rem;
+        align-items: center;
+    }
+
     .th-eliminar,
     .th-actualizar {
         text-align: center;
@@ -79,11 +86,15 @@
 .total-cartera {
     display: flex;
     justify-content: end;
-    
-    .total-cartera__texto{
+
+    .total-cartera__texto {
         border: 1px solid $secundario;
         border-radius: 1rem;
         padding: .5rem 2rem;
-        
+
     }
+}
+
+.fa-solid {
+    cursor: pointer;
 }

@@ -105,6 +105,12 @@ td {
     .barra-de-busqueda input::placeholder {
       padding-left: 1rem; }
 
+.table .table__th {
+  display: flex;
+  gap: 1rem;
+  font-size: 1.6rem;
+  align-items: center; }
+
 .table .th-eliminar,
 .table .th-actualizar {
   text-align: center; }
@@ -133,3 +139,6 @@ td {
     border: 1px solid #009FB7;
     border-radius: 1rem;
     padding: .5rem 2rem; }
+
+.fa-solid {
+  cursor: pointer; }
