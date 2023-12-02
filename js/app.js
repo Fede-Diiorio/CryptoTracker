@@ -18,17 +18,17 @@ function obtenerPreciosDeApi() {
 }
 
 function mostrarNumeroConComas(numero) {
-    const numeroConDecimales = Number(numero).toFixed(2);
-    return numeroFormateado = numeroConDecimales.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return numero.toLocaleString('es-ES');
 }
 
+
 function eliminarCriptoDeTabla(cripto) {
-    const indeceCriptoAEliminar = portafolio.findIndex((el) => {
+    const indiceCriptoAEliminar = portafolio.findIndex((el) => {
         return cripto.ticker === el.ticker;
     });
 
-    if (indeceCriptoAEliminar !== -1) {
-        portafolio.splice(indeceCriptoAEliminar, 1);
+    if (indiceCriptoAEliminar !== -1) {
+        portafolio.splice(indiceCriptoAEliminar, 1);
         Toastify({
             text: "Eliminada Correctamente",
             duration: 3000,
@@ -132,7 +132,7 @@ function actualizarCriptoEnLocalStorage(cripto) {
 function renderizarBarraDeBuscarCripto() {
 
     const contenedor = document.getElementById("barraDeBusqueda");
-    contenedor.innerHTML = "";
+    contenedor.innerText = "";
 
     const divPadre = document.createElement("form");
     divPadre.classList.add("barra-de-busqueda");
@@ -217,7 +217,7 @@ function renderizarBusquedaDeCripto(listaDeCriptos) {
                 const cantidadFloat = parseFloat(cantidad);
                 if (!isNaN(cantidadFloat) && cantidadFloat > 0) {
                     guardarCriptoEnLocalStorage(cripto, cantidadFloat);
-                    contenedor.innerHTML = "";
+                    contenedor.innerText = "";
                     renderizarTablaConCriptos();
                 } else {
                     Swal.fire({
@@ -236,7 +236,7 @@ function renderizarBusquedaDeCripto(listaDeCriptos) {
 
 function renderizarTablaConCriptos() {
     const contenedor = document.querySelector("#tabla table tbody");
-    contenedor.innerHTML = "";
+    contenedor.innerText = "";
 
     renderizarTotalDeCartera();
 
@@ -257,18 +257,18 @@ function renderizarTablaConCriptos() {
         tdValor.innerText = `$ ${mostrarNumeroConComas(resultadoCartera)}`;
 
         const tdActualizar = document.createElement("td");
-        const botonActualizar = document.createElement("p");
-        botonActualizar.classList.add("boton-td");
-        botonActualizar.innerHTML = '<i class="fa-solid fa-rotate-right"></i>';
+        tdActualizar.classList.add("boton-td");
+        const botonActualizar = document.createElement("i");
+        botonActualizar.classList.add("fa-solid", "fa-rotate-right");
         botonActualizar.addEventListener("click", () => {
             actualizarCriptoEnLocalStorage(criptoTabla);
             renderizarTablaConCriptos();
         });
 
         const tdBorrar = document.createElement("td");
-        const botonBorrar = document.createElement("p");
-        botonBorrar.classList.add("boton-td");
-        botonBorrar.innerHTML = '<i class="fa-solid fa-trash"></i>';
+        tdBorrar.classList.add("boton-td")
+        const botonBorrar = document.createElement("i");
+        botonBorrar.classList.add("fa-solid", "fa-trash");
         botonBorrar.addEventListener("click", () => {
             Swal.fire({
                 title: "¿Desea eliminar esta cripto de su portafolio?",
@@ -294,7 +294,7 @@ function renderizarTablaConCriptos() {
 
 function renderizarTotalDeCartera() {
     const contenedor = document.getElementById("totalCartera");
-    contenedor.innerHTML = "";
+    contenedor.innerText = "";
 
     let mostrarTotal = 0;
     for (let i = 0; portafolio.length > i; i++) {
@@ -314,7 +314,7 @@ function renderizarTotalDeCartera() {
 
 function renderizadoDeBotonDeFiltroOrden(id, propiedad) {
     const contenedor = document.getElementById(id);
-    contenedor.innerHTML = "";
+    contenedor.innerText = "";
 
     const divPadre = document.createElement("div");
     divPadre.classList.add("caja-filtro", "d-flex", "flex-column");

@@ -53,34 +53,36 @@
         display: flex;
         justify-content: center;
     }
-
 }
 
 .boton-td {
     margin: 0 auto;
     text-align: center;
 
-    .fa-trash {
-        color: $eliminar;
-        transition: all .3s ease-in-out;
+}
 
-        &:hover {
-            color: $eliminarOscuro;
-        }
+.fa-trash,
+.fa-rotate-right {
+    font-size: 3rem;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+}
+
+.fa-trash {
+    color: $eliminar;
+
+
+    &:hover {
+        color: $eliminarOscuro;
     }
+}
 
-    .fa-rotate-right {
-        color: $secundario;
-        transition: all .3s ease-in-out;
+.fa-rotate-right {
+    color: $secundario;
 
-        &:hover {
-            color: $secundarioOscuro;
-        }
-    }
 
-    i {
-        font-size: 3rem;
-        cursor: pointer;
+    &:hover {
+        color: $secundarioOscuro;
     }
 }
 
