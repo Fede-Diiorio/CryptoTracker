@@ -91,15 +91,20 @@ function guardarCriptoEnLocalStorage(cripto, cantidad) {
 }
 
 function actualizarCriptoEnLocalStorage(cripto) {
-    const buscarIndiceDeCripto = portafolio.findIndex((el) => {
+    const buscarIndiceDeCriptoEnProtafolio = portafolio.findIndex((el) => {
         return el.ticker === cripto.ticker;
     });
-    if (buscarIndiceDeCripto !== -1) {
+
+    const buscarIndiceDeCriptoParaElPrecio = listaDeCriptos.findIndex((el) => {
+        return el.symbol === cripto.ticker
+    });
+
+    if (buscarIndiceDeCriptoEnProtafolio !== -1) {
 
         Swal.fire({
             title: "Nueva Cantidad",
             input: "number",
-            inputValue: portafolio[buscarIndiceDeCripto].cantidad,
+            inputValue: portafolio[buscarIndiceDeCriptoEnProtafolio].cantidad,
             inputLabel: "Ingrese la nueva cantidad de monedas que posee:",
             inputAttributes: {
                 autocomplete: "off",
@@ -110,9 +115,11 @@ function actualizarCriptoEnLocalStorage(cripto) {
             if (result.isConfirmed) {
                 const cantidad = parseFloat(result.value);
                 if (!isNaN(cantidad) && cantidad > 0) {
-                    portafolio[buscarIndiceDeCripto].cantidad = cantidad;
-                    portafolio[buscarIndiceDeCripto].total = portafolio[buscarIndiceDeCripto].precio * cantidad;
+                    portafolio[buscarIndiceDeCriptoEnProtafolio].cantidad = cantidad;
+                    portafolio[buscarIndiceDeCriptoEnProtafolio].total = portafolio[buscarIndiceDeCriptoEnProtafolio].precio * cantidad;
+                    portafolio[buscarIndiceDeCriptoEnProtafolio].precio = parseFloat(listaDeCriptos[buscarIndiceDeCriptoParaElPrecio].price);
                     localStorage.setItem("portafolio", JSON.stringify(portafolio));
+
                     renderizarTotalDeCartera();
                     renderizarTablaConCriptos();
                 } else {
