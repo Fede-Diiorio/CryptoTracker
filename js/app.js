@@ -312,9 +312,11 @@ function renderizarTotalDeCartera() {
     contenedor.append(divPadre)
 }
 
-function renderizadoDeBotonDeFiltroOrden(id, propiedad) {
+function renderizadoDeBotonDeFiltroOrden(id, propiedad, boolean) {
     const contenedor = document.getElementById(id);
     contenedor.innerText = "";
+
+    const bandera = boolean;
 
     const divPadre = document.createElement("div");
     divPadre.classList.add("caja-filtro", "d-flex", "flex-column");
@@ -322,31 +324,57 @@ function renderizadoDeBotonDeFiltroOrden(id, propiedad) {
     const flechaArriba = document.createElement("i");
     flechaArriba.classList.add("fa-solid", "fa-caret-up");
     flechaArriba.addEventListener("click", () => {
-        portafolio.sort((a, b) => {
-            if (a[propiedad] < b[propiedad]) {
-                return 1;
-            }
-            if (a[propiedad] > b[propiedad]) {
-                return -1;
-            }
-            return 0
-        })
-        renderizarTablaConCriptos();
+        if(bandera === true) {
+            portafolio.sort((a, b) => {
+                if (a[propiedad] < b[propiedad]) {
+                    return 1;
+                }
+                if (a[propiedad] > b[propiedad]) {
+                    return -1;
+                }
+                return 0
+            });
+            renderizarTablaConCriptos();
+        } else {
+            portafolio.sort((a, b) => {
+                if (a[propiedad] > b[propiedad]) {
+                    return 1;
+                }
+                if (a[propiedad] < b[propiedad]) {
+                    return -1;
+                }
+                return 0
+            });
+            renderizarTablaConCriptos();
+        }
     });
 
     const flechaAbajo = document.createElement("i");
     flechaAbajo.classList.add("fa-solid", "fa-caret-down");
     flechaAbajo.addEventListener("click", () => {
-        portafolio.sort((a, b) => {
-            if (a[propiedad] < b[propiedad]) {
-                return -1;
-            }
-            if (a[propiedad] > b[propiedad]) {
-                return 1;
-            }
-            return 0
-        })
-        renderizarTablaConCriptos();
+        if(bandera === true) {
+            portafolio.sort((a, b) => {
+                if (a[propiedad] > b[propiedad]) {
+                    return 1;
+                }
+                if (a[propiedad] < b[propiedad]) {
+                    return -1;
+                }
+                return 0
+            });
+            renderizarTablaConCriptos();
+        } else {
+            portafolio.sort((a, b) => {
+                if (a[propiedad] < b[propiedad]) {
+                    return 1;
+                }
+                if (a[propiedad] > b[propiedad]) {
+                    return -1;
+                }
+                return 0
+            });
+            renderizarTablaConCriptos();
+        }
     });
 
 
@@ -363,10 +391,10 @@ const listaDeCriptos = [];
 obtenerCriptosDeLocalStorage();
 obtenerPreciosDeApi().then(() => {
     renderizarBarraDeBuscarCripto();
-    renderizadoDeBotonDeFiltroOrden("filtroTicker", "ticker");
-    renderizadoDeBotonDeFiltroOrden("filtroPrecio", "precio");
-    renderizadoDeBotonDeFiltroOrden("filtroCantidad", "cantidad");
-    renderizadoDeBotonDeFiltroOrden("filtroCartera", "total");
+    renderizadoDeBotonDeFiltroOrden("filtroTicker", "ticker", false);
+    renderizadoDeBotonDeFiltroOrden("filtroPrecio", "precio", true);
+    renderizadoDeBotonDeFiltroOrden("filtroCantidad", "cantidad",true);
+    renderizadoDeBotonDeFiltroOrden("filtroCartera", "total", true);
     renderizarTablaConCriptos();
     renderizarTotalDeCartera();
 });
