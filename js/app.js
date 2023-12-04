@@ -95,10 +95,6 @@ function actualizarCriptoEnLocalStorage(cripto) {
         return el.ticker === cripto.ticker;
     });
 
-    const buscarIndiceDeCriptoParaElPrecio = listaDeCriptos.findIndex((el) => {
-        return el.symbol === cripto.ticker
-    });
-
     if (buscarIndiceDeCriptoEnProtafolio !== -1) {
 
         Swal.fire({
@@ -117,7 +113,6 @@ function actualizarCriptoEnLocalStorage(cripto) {
                 if (!isNaN(cantidad) && cantidad > 0) {
                     portafolio[buscarIndiceDeCriptoEnProtafolio].cantidad = cantidad;
                     portafolio[buscarIndiceDeCriptoEnProtafolio].total = portafolio[buscarIndiceDeCriptoEnProtafolio].precio * cantidad;
-                    portafolio[buscarIndiceDeCriptoEnProtafolio].precio = parseFloat(listaDeCriptos[buscarIndiceDeCriptoParaElPrecio].price);
                     localStorage.setItem("portafolio", JSON.stringify(portafolio));
 
                     renderizarTotalDeCartera();
@@ -131,6 +126,21 @@ function actualizarCriptoEnLocalStorage(cripto) {
                 }
             }
         });
+    }
+}
+
+function actualizarPrecio(cripto) {
+    const buscarIndiceDeCriptoEnProtafolio = portafolio.findIndex((el) => {
+        return el.ticker === cripto.ticker;
+    });
+
+    const buscarIndiceDeCriptoParaElPrecio = listaDeCriptos.findIndex((el) => {
+        return el.symbol === cripto.ticker
+    });
+
+    if (buscarIndiceDeCriptoParaElPrecio !== -1) {
+        portafolio[buscarIndiceDeCriptoEnProtafolio].precio = parseFloat(listaDeCriptos[buscarIndiceDeCriptoParaElPrecio].price);
+        localStorage.setItem("portafolio", JSON.stringify(portafolio));
     }
 }
 
@@ -247,6 +257,9 @@ function renderizarTablaConCriptos() {
     renderizarTotalDeCartera();
 
     for (const criptoTabla of portafolio) {
+
+        actualizarPrecio(criptoTabla);
+
         const tr = document.createElement("tr");
 
         const tdTicker = document.createElement("td");
@@ -287,7 +300,7 @@ function renderizarTablaConCriptos() {
                     renderizarTotalDeCartera();
                 } else if (result.isDenied) {
                     renderizarTablaConCriptos();
-                }
+                };
             });
         });
 
@@ -295,7 +308,7 @@ function renderizarTablaConCriptos() {
         tdBorrar.append(botonBorrar);
         tr.append(tdTicker, tdPrecio, tdCantidad, tdValor, tdActualizar, tdBorrar);
         contenedor.append(tr);
-    }
+    };
 }
 
 function renderizarTotalDeCartera() {
@@ -352,7 +365,6 @@ function renderizadoDeBotonDeFiltroOrden(id, propiedad, ascendente) {
     divPadre.append(flechaArriba, flechaAbajo);
     contenedor.append(divPadre);
 }
-
 
 // *** VARIABLES ***
 let portafolio = [];
