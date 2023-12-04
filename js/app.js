@@ -21,7 +21,6 @@ function mostrarNumeroConComas(numero) {
     return numero.toLocaleString('es-ES');
 }
 
-
 function eliminarCriptoDeTabla(cripto) {
     const indiceCriptoAEliminar = portafolio.findIndex((el) => {
         return cripto.ticker === el.ticker;
@@ -312,11 +311,9 @@ function renderizarTotalDeCartera() {
     contenedor.append(divPadre)
 }
 
-function renderizadoDeBotonDeFiltroOrden(id, propiedad, boolean) {
+function renderizadoDeBotonDeFiltroOrden(id, propiedad, ascendente) {
     const contenedor = document.getElementById(id);
-    contenedor.innerText = "";
-
-    const bandera = boolean;
+    contenedor.innerHTML = "";
 
     const divPadre = document.createElement("div");
     divPadre.classList.add("caja-filtro", "d-flex", "flex-column");
@@ -324,63 +321,31 @@ function renderizadoDeBotonDeFiltroOrden(id, propiedad, boolean) {
     const flechaArriba = document.createElement("i");
     flechaArriba.classList.add("fa-solid", "fa-caret-up");
     flechaArriba.addEventListener("click", () => {
-        if(bandera === true) {
-            portafolio.sort((a, b) => {
-                if (a[propiedad] < b[propiedad]) {
-                    return 1;
-                }
-                if (a[propiedad] > b[propiedad]) {
-                    return -1;
-                }
-                return 0
-            });
-            renderizarTablaConCriptos();
-        } else {
-            portafolio.sort((a, b) => {
-                if (a[propiedad] > b[propiedad]) {
-                    return 1;
-                }
-                if (a[propiedad] < b[propiedad]) {
-                    return -1;
-                }
-                return 0
-            });
-            renderizarTablaConCriptos();
-        }
+        ordenarTabla(ascendente);
     });
 
     const flechaAbajo = document.createElement("i");
     flechaAbajo.classList.add("fa-solid", "fa-caret-down");
     flechaAbajo.addEventListener("click", () => {
-        if(bandera === true) {
-            portafolio.sort((a, b) => {
-                if (a[propiedad] > b[propiedad]) {
-                    return 1;
-                }
-                if (a[propiedad] < b[propiedad]) {
-                    return -1;
-                }
-                return 0
-            });
-            renderizarTablaConCriptos();
-        } else {
-            portafolio.sort((a, b) => {
-                if (a[propiedad] < b[propiedad]) {
-                    return 1;
-                }
-                if (a[propiedad] > b[propiedad]) {
-                    return -1;
-                }
-                return 0
-            });
-            renderizarTablaConCriptos();
-        }
+        ordenarTabla(!ascendente);
     });
 
+    function ordenarTabla(ascendente) {
+        const multiplicador = ascendente ? 1 : -1;
+
+        portafolio.sort((a, b) => {
+            if (a[propiedad] > b[propiedad]) return multiplicador;
+            if (a[propiedad] < b[propiedad]) return -multiplicador;
+            return 0;
+        });
+
+        renderizarTablaConCriptos();
+    }
 
     divPadre.append(flechaArriba, flechaAbajo);
     contenedor.append(divPadre);
 }
+
 
 // *** VARIABLES ***
 let portafolio = [];
@@ -391,10 +356,10 @@ const listaDeCriptos = [];
 obtenerCriptosDeLocalStorage();
 obtenerPreciosDeApi().then(() => {
     renderizarBarraDeBuscarCripto();
-    renderizadoDeBotonDeFiltroOrden("filtroTicker", "ticker", false);
-    renderizadoDeBotonDeFiltroOrden("filtroPrecio", "precio", true);
-    renderizadoDeBotonDeFiltroOrden("filtroCantidad", "cantidad",true);
-    renderizadoDeBotonDeFiltroOrden("filtroCartera", "total", true);
+    renderizadoDeBotonDeFiltroOrden("filtroTicker", "ticker", true);
+    renderizadoDeBotonDeFiltroOrden("filtroPrecio", "precio", false);
+    renderizadoDeBotonDeFiltroOrden("filtroCantidad", "cantidad", false);
+    renderizadoDeBotonDeFiltroOrden("filtroCartera", "total", false);
     renderizarTablaConCriptos();
     renderizarTotalDeCartera();
 });
