@@ -21,6 +21,30 @@ function mostrarNumeroConComas(numero) {
     return numero.toLocaleString('es-ES');
 }
 
+function mensajesToastify(mensaje, color) {
+
+    if (color === true) {
+        texto = "linear-gradient(to right, #b1140e, #d47370)"
+    } else {
+        texto = "linear-gradient(to right, #00b09b, #96c93d)"
+    }
+
+    Toastify({
+        text: mensaje,
+        duration: 3000,
+        destination: "https://github.com/apvarun/toastify-js",
+        newWindow: true,
+        close: true,
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+            background: texto,
+        },
+        onClick: function () { } // Callback after click
+    }).showToast();
+}
+
 function eliminarCriptoDeTabla(cripto) {
     const indiceCriptoAEliminar = portafolio.findIndex((el) => {
         return cripto.ticker === el.ticker;
@@ -28,20 +52,7 @@ function eliminarCriptoDeTabla(cripto) {
 
     if (indiceCriptoAEliminar !== -1) {
         portafolio.splice(indiceCriptoAEliminar, 1);
-        Toastify({
-            text: "Eliminada Correctamente",
-            duration: 3000,
-            destination: "https://github.com/apvarun/toastify-js",
-            newWindow: true,
-            close: true,
-            gravity: "top", // `top` or `bottom`
-            position: "right", // `left`, `center` or `right`
-            stopOnFocus: true, // Prevents dismissing of toast on hover
-            style: {
-                background: "linear-gradient(to right, #b1140e, #d47370)",
-            },
-            onClick: function () { } // Callback after click
-        }).showToast();
+        mensajesToastify("Eliminada Correctamente", true);
     }
     localStorage.setItem("portafolio", JSON.stringify(portafolio));
     renderizarTablaConCriptos();
@@ -69,20 +80,7 @@ function guardarCriptoEnLocalStorage(cripto, cantidad) {
         });
         if (buscarIndiceDeCripto === -1) {
             portafolio.push(agregarCripto);
-            Toastify({
-                text: "¡Agregada correctamente!",
-                duration: 3000,
-                destination: "https://github.com/apvarun/toastify-js",
-                newWindow: true,
-                close: true,
-                gravity: "top", // `top` or `bottom`
-                position: "right", // `left`, `center` or `right`
-                stopOnFocus: true, // Prevents dismissing of toast on hover
-                style: {
-                    background: "linear-gradient(to right, #00b09b, #96c93d)",
-                },
-                onClick: function () { } // Callback after click
-            }).showToast();
+            mensajesToastify("¡Agregada Correctamente!", false);
         } else {
             portafolio[buscarIndiceDeCripto].cantidad = parseFloat(cantidad);
         }
@@ -176,20 +174,7 @@ function renderizarBarraDeBuscarCripto() {
             renderizarBarraDeBuscarCripto();
         } else {
             if (input.value === "") {
-                Toastify({
-                    text: "Debe ingresar un ticker válido",
-                    duration: 3000,
-                    destination: "https://github.com/apvarun/toastify-js",
-                    newWindow: true,
-                    close: true,
-                    gravity: "top", // `top` or `bottom`
-                    position: "right", // `left`, `center` or `right`
-                    stopOnFocus: true, // Prevents dismissing of toast on hover
-                    style: {
-                        background: "linear-gradient(to right, #b1140e, #d47370)",
-                    },
-                    onClick: function () { } // Callback after click
-                }).showToast();
+                mensajesToastify("Debe ingresar un ticker válido", true);
             } else {
                 renderizarBarraDeBuscarCripto();
                 renderizarBusquedaDeCripto(tickerFiltrado);

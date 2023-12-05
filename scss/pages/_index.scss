@@ -58,7 +58,6 @@
 .boton-td {
     margin: 0 auto;
     text-align: center;
-
 }
 
 .fa-trash,
@@ -71,7 +70,6 @@
 .fa-trash {
     color: $eliminar;
 
-
     &:hover {
         color: $eliminarOscuro;
     }
@@ -79,7 +77,6 @@
 
 .fa-rotate-right {
     color: $secundario;
-
 
     &:hover {
         color: $secundarioOscuro;
