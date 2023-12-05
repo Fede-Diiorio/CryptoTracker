@@ -58,6 +58,14 @@ function eliminarCriptoDeTabla(cripto) {
     renderizarTablaConCriptos();
 }
 
+function altertaSweetAlertBasica(titulo, mensaje, icono) {
+    Swal.fire({
+        title: titulo,
+        text: mensaje,
+        icon: icono
+    });
+}
+
 // Local Storage
 function obtenerCriptosDeLocalStorage() {
     const portafolioEnLocalStorage = JSON.parse(localStorage.getItem("portafolio"));
@@ -116,11 +124,7 @@ function actualizarCriptoEnLocalStorage(cripto) {
                     renderizarTotalDeCartera();
                     renderizarTablaConCriptos();
                 } else {
-                    Swal.fire({
-                        title: "Error",
-                        text: "Debe ingresar un número válido mayor a 0.",
-                        icon: "error"
-                    });
+                    altertaSweetAlertBasica("Error", "Debe ingresar un número mayor a 0", "error");
                 }
             }
         });
@@ -166,11 +170,7 @@ function renderizarBarraDeBuscarCripto() {
         });
 
         if (tickerFiltrado.length === 0) {
-            Swal.fire({
-                title: "Hubo un Problema",
-                text: "No contamos con ese ticker en nuestra base de datos.",
-                icon: "question"
-            });
+            altertaSweetAlertBasica("Hubo un Problema", "No contamos con ese ticker en nuestra base de datos.", "question");
             renderizarBarraDeBuscarCripto();
         } else {
             if (input.value === "") {
@@ -221,11 +221,7 @@ function renderizarBusquedaDeCripto(listaDeCriptos) {
                     contenedor.innerText = "";
                     renderizarTablaConCriptos();
                 } else {
-                    Swal.fire({
-                        title: "Error",
-                        text: "Debe ingresar un número válido mayor a 0.",
-                        icon: "error"
-                    });
+                    altertaSweetAlertBasica("Error", "Debe ingresar un número válido mayor a 0.", "error");
                 }
             }
         });
