@@ -66,6 +66,10 @@ function altertaSweetAlertBasica(titulo, mensaje, icono) {
     });
 }
 
+function buscarIndiceEnLista(lista, propiedad, valor) {
+    return lista.findIndex(el => el[propiedad] === valor);
+}
+
 // Local Storage
 function obtenerCriptosDeLocalStorage() {
     const portafolioEnLocalStorage = JSON.parse(localStorage.getItem("portafolio"));
@@ -131,17 +135,20 @@ function actualizarCriptoEnLocalStorage(cripto) {
     }
 }
 
-function actualizarPrecio(cripto) {
-    const buscarIndiceDeCriptoEnProtafolio = portafolio.findIndex((el) => {
-        return el.ticker === cripto.ticker;
-    });
+function actualizarInformacionCriptoEnPortafolio(indice, nuevoPrecio) {
+    if (indice !== -1) {
+        portafolio[indice].precio = nuevoPrecio;
+        portafolio[indice].total = portafolio[indice].precio * portafolio[indice].cantidad;
+    }
+}
 
-    const buscarIndiceDeCriptoParaElPrecio = listaDeCriptos.findIndex((el) => {
-        return el.symbol === cripto.ticker
-    });
+function actualizarPrecio(cripto) {
+    const buscarIndiceDeCriptoEnProtafolio = buscarIndiceEnLista(portafolio, 'ticker', cripto.ticker);
+    const buscarIndiceDeCriptoParaElPrecio = buscarIndiceEnLista(listaDeCriptos, 'symbol', cripto.ticker);
 
     if (buscarIndiceDeCriptoParaElPrecio !== -1) {
-        portafolio[buscarIndiceDeCriptoEnProtafolio].precio = parseFloat(listaDeCriptos[buscarIndiceDeCriptoParaElPrecio].price);
+        const nuevoPrecio = parseFloat(listaDeCriptos[buscarIndiceDeCriptoParaElPrecio].price);
+        actualizarInformacionCriptoEnPortafolio(buscarIndiceDeCriptoEnProtafolio, nuevoPrecio);
         localStorage.setItem("portafolio", JSON.stringify(portafolio));
     }
 }
