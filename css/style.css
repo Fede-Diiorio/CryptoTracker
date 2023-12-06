@@ -146,3 +146,26 @@ td {
 
 .fa-solid {
   cursor: pointer; }
+
+.footer {
+  background-color: #FADF7F;
+  padding: 2rem; }
+  .footer .contenedor-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 2rem; }
+    .footer .contenedor-footer h3 {
+      margin: 0; }
+    .footer .contenedor-footer a {
+      text-decoration: none;
+      color: #ffffff;
+      background-color: #009FB7;
+      padding: .5rem 2rem;
+      border-radius: 1rem;
+      border: 1px solid #1F363D;
+      transition: all .3s ease-in-out; }
+      .footer .contenedor-footer a:hover {
+        background-color: #1F363D;
+        border: 1px solid #D9B26F; }
