@@ -2,7 +2,7 @@
 // Utilidades
 function obtenerPreciosDeApi() {
     return new Promise((resolve, reject) => {
-        fetch("https://api.binance.com/api/v3/ticker/price")
+        fetch(API_URL)
             .then((response) => response.json())
             .then((responseJson) => {
                 for (const cripto of responseJson) {
@@ -13,7 +13,10 @@ function obtenerPreciosDeApi() {
                 }
                 resolve(listaDeCriptos);
             })
-            .catch((error) => reject(error));
+            .catch((error) => {
+                console.error("Error en la solicitud API:", error);
+                reject(error);
+            });
     });
 }
 
@@ -22,12 +25,7 @@ function mostrarNumeroConComas(numero) {
 }
 
 function mensajesToastify(mensaje, color) {
-
-    if (color === true) {
-        texto = "linear-gradient(to right, #b1140e, #d47370)"
-    } else {
-        texto = "linear-gradient(to right, #00b09b, #96c93d)"
-    }
+    const estilo = color ? "linear-gradient(to right, #b1140e, #d47370)" : "linear-gradient(to right, #00b09b, #96c93d)";
 
     Toastify({
         text: mensaje,
@@ -39,7 +37,7 @@ function mensajesToastify(mensaje, color) {
         position: "right", // `left`, `center` or `right`
         stopOnFocus: true, // Prevents dismissing of toast on hover
         style: {
-            background: texto,
+            background: estilo,
         },
         onClick: function () { } // Callback after click
     }).showToast();
@@ -355,6 +353,7 @@ function renderizadoDeBotonDeFiltroOrden(id, propiedad, ascendente) {
 }
 
 // *** VARIABLES ***
+const API_URL = "https://api.binance.com/api/v3/ticker/price";
 let portafolio = [];
 const listaDeCriptos = [];
 
