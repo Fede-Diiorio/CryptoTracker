@@ -109,7 +109,8 @@ td {
   display: flex;
   gap: 1rem;
   font-size: 1.6rem;
-  align-items: center; }
+  align-items: center;
+  visibility: visible; }
 
 .table .table__th.th-eliminar,
 .table .table__th.th-actualizar {
@@ -146,6 +147,21 @@ td {
 
 .fa-solid {
   cursor: pointer; }
+
+@media (max-width: 768px) {
+  .table .table__th--precio,
+  .table .table__th--cantidad {
+    display: none;
+    visibility: hidden; } }
+
+@media (max-width: 425px) {
+  .table .table__th--eliminar {
+    display: none;
+    visibility: hidden; }
+  .barra-de-busqueda {
+    flex-direction: column-reverse; }
+  .total-cartera {
+    justify-content: center; } }
 
 .footer {
   background-color: #FADF7F;

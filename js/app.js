@@ -252,9 +252,11 @@ function renderizarTablaConCriptos() {
         tdTicker.innerText = criptoTabla.ticker;
 
         const tdPrecio = document.createElement("td");
+        tdPrecio.classList.add("table__th--precio");
         tdPrecio.innerText = `$ ${mostrarNumeroConComas(criptoTabla.precio)}`;
 
         const tdCantidad = document.createElement("td");
+        tdCantidad.classList.add("table__th--cantidad");
         tdCantidad.innerText = criptoTabla.cantidad;
 
         const tdValor = document.createElement("td");
@@ -271,7 +273,7 @@ function renderizarTablaConCriptos() {
         });
 
         const tdBorrar = document.createElement("td");
-        tdBorrar.classList.add("boton-td")
+        tdBorrar.classList.add("boton-td", "table__th--eliminar")
         const botonBorrar = document.createElement("i");
         botonBorrar.classList.add("fa-solid", "fa-trash");
         botonBorrar.addEventListener("click", () => {
@@ -311,7 +313,7 @@ function renderizarTotalDeCartera() {
 
     const total = document.createElement("p");
     total.classList.add("total-cartera__texto");
-    total.innerHTML = `<strong>Total: </strong>$ ${mostrarNumeroConComas(mostrarTotal)}`;
+    total.innerHTML = `<strong>Valor de Cartera: </strong>$ ${mostrarNumeroConComas(mostrarTotal)}`;
 
     divPadre.append(total);
     contenedor.append(divPadre)
